@@ -1,0 +1,1 @@
+- 2026-11-24: Updated spec.md to describe a Python Tkinter desktop application instead of a web app; no application code was built. Worked.
