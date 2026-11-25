@@ -5,6 +5,7 @@ from tkinter import ttk, filedialog, messagebox
 
 from beam_csv import write_analysis_csv
 from beam_files import open_beam_file, save_beam_file
+from calculation_sheet import export_calculation_sheet
 from beam_calculations import (
     BeamModel,
     PointLoad,
@@ -252,6 +253,11 @@ class BeamDesignerApp:
         ).pack(side="right", padx=(0, 8))
         ttk.Button(
             header, text="Export CSV", command=self.export_csv
+        ).pack(side="right", padx=(0, 8))
+        ttk.Button(
+            header,
+            text="Calculation Sheet PDF",
+            command=self.export_calculation_sheet,
         ).pack(side="right", padx=(0, 8))
 
         self.suggestion_text = tk.StringVar(value="Suggested: W12x26")
@@ -869,6 +875,23 @@ class BeamDesignerApp:
             messagebox.showerror("CSV export failed", str(exc), parent=self.root)
             return
         messagebox.showinfo("CSV exported", path, parent=self.root)
+
+    def export_calculation_sheet(self):
+        path = filedialog.asksaveasfilename(
+            title="Export Calculation Sheet PDF",
+            defaultextension=".pdf",
+            filetypes=[("PDF files", "*.pdf"), ("All files", "*.*")],
+        )
+        if not path:
+            return
+        try:
+            model = self.current_model()
+            analysis = calculate(model)
+            export_calculation_sheet(path, model, analysis)
+        except (OSError, ValueError) as exc:
+            messagebox.showerror("PDF export failed", str(exc), parent=self.root)
+            return
+        messagebox.showinfo("Calculation sheet exported", path, parent=self.root)
 
     def open_report(self):
         if not hasattr(self, "analysis"):
