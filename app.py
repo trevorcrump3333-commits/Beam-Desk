@@ -737,7 +737,6 @@ class BeamDesignerApp:
             28,
             text=text,
             fill=TEXT,
-            background=PANEL,
             justify="left",
             font=("TkDefaultFont", 8, "bold"),
             tags="crosshair",

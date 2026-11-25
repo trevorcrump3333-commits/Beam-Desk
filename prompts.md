@@ -1,3 +1,4 @@
 - 2026-11-24: Updated spec.md to describe a Python Tkinter desktop application instead of a web app; no application code was built. Worked.
 - 2026-11-24: Built the Tkinter desktop beam analysis app using app.py and beam_calculations.py, with presets, load controls, Canvas diagrams, checks, reports, and calculation tests. All four calculation validation tests passed; source compilation passed. Worked.
 - 2026-11-24: Ran all four spec.md beam validation cases against beam_calculations.py and compared expected with actual reactions, loads, moments, stress, deflection, and status values. All results matched the specification within rounding. Worked.
+- 2026-11-24: Fixed the diagram hover crosshair TclError by removing the unsupported background option from Canvas.create_text in app.py. Compilation and all four calculation tests passed. Worked.
