@@ -128,6 +128,9 @@ floor beam or deck joist.
 - Print / Save PDF Report action opens a print-friendly report window or
   invokes the operating system print dialog. The report includes inputs,
   reactions, maximum shear, maximum moment, maximum deflection, and status.
+- A Calculation Sheet PDF export button saves a clean, hand-in-ready PDF with
+  beam inputs at the top, followed by the shear, moment, and deflection
+  diagrams and the bending and deflection design checks.
 - Recalculate immediately whenever an input changes.
 - Show formula help when hovering or focusing each check card.
 
@@ -205,5 +208,5 @@ floor beam or deck joist.
    - Add hover crosshairs and values.
    - Add filled diagrams and maximum labels.
    - Add ratio bars and startup defaults.
-   - Add print or PDF report support.
+   - Add print or PDF report support and the Calculation Sheet PDF export.
    - Verify the final desktop workflow end to end.

@@ -9,3 +9,4 @@
 - 2026-11-24: Added an Export CSV button requirement to spec.md for a table of x, shear, moment, and deflection along the beam, including units. No application code was built. Worked.
 - 2026-11-24: Implemented Export CSV in the app, writing each analysis sample's x, shear, moment, and deflection with unit-bearing headers. The CSV export test and all existing file/calculation tests passed. Worked.
 - 2026-11-24: Reran and asserted all four spec.md beam validation cases after CSV export changes. Reactions, maxima, stresses, deflections, and pass/fail statuses pass within rounding; case 2's deflection location remains 8.75 ft versus specified 8.82 ft due to the sample grid. Worked with this noted location discrepancy.
+- 2026-11-24: Updated spec.md to describe a Calculation Sheet PDF export button with beam inputs, diagrams, and design checks in a clean hand-in-ready PDF. No application code was built. Worked.
