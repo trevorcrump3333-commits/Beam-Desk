@@ -122,6 +122,9 @@ floor beam or deck joist.
   above 100%.
 - A label naming the lightest passing section and a "Use suggested section"
   button.
+- An Export CSV button opens a save-file dialog and writes one row per
+  analysis location, with columns x (ft), shear V (kips), moment M (kip-ft),
+  and deflection y (in).
 - Print / Save PDF Report action opens a print-friendly report window or
   invokes the operating system print dialog. The report includes inputs,
   reactions, maximum shear, maximum moment, maximum deflection, and status.
