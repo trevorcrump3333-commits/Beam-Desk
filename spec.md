@@ -23,6 +23,10 @@ floor beam or deck joist.
 
 ## Layout
 
+- Include a native File menu with Save and Open commands.
+- Save stores the current beam settings: support type, span, material and
+  section, deflection limit, and all point and uniform loads. Open restores
+  those settings and loads into the application.
 - Use a top header containing the application title and a Print / Save PDF
   Report action.
 - Place beam inputs in a left-hand controls panel.
@@ -162,7 +166,7 @@ floor beam or deck joist.
 ## Out of Scope
 
 - Self-weight, shear stress, lateral-torsional buckling, load combinations,
-  continuous beams, and saving design files.
+  and continuous beams.
 
 ## Build Stages
 
