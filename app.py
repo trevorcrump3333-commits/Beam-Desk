@@ -808,7 +808,7 @@ class BeamDesignerApp:
         text = "x %.2f ft\nV %.2f k\nM %.2f kip-ft\ny %.3f in" % (
             x_ft, shear, moment, deflection,
         )
-        canvas.create_text(
+        text_item = canvas.create_text(
             min(right - 55, max(left + 55, event.x)),
             28,
             text=text,
@@ -817,6 +817,19 @@ class BeamDesignerApp:
             font=("TkDefaultFont", 8, "bold"),
             tags="crosshair",
         )
+        text_bounds = canvas.bbox(text_item)
+        if text_bounds:
+            left_edge, top_edge, right_edge, bottom_edge = text_bounds
+            background = canvas.create_rectangle(
+                left_edge - 4,
+                top_edge - 3,
+                right_edge + 4,
+                bottom_edge + 3,
+                fill=PANEL,
+                outline=LINE,
+                tags="crosshair",
+            )
+            canvas.tag_lower(background, text_item)
 
     def clear_crosshair(self, _event):
         for canvas in self.diagram_canvases:
