@@ -3,6 +3,7 @@ import os
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 
+from beam_files import open_beam_file, save_beam_file
 from beam_calculations import (
     BeamModel,
     PointLoad,
@@ -116,12 +117,24 @@ class BeamDesignerApp:
         self.drag_load_index = None
         self.crosshair_items = []
         self.redraw_after = None
+        self.current_file_path = None
 
         self.create_widgets()
         self.apply_preset("Default: 20 ft Steel Floor Beam")
         root.bind("<Configure>", lambda _event: self.schedule_redraw())
+        root.bind("<Control-s>", lambda _event: self.save_file())
+        root.bind("<Control-o>", lambda _event: self.open_file())
+        root.bind("<Command-s>", lambda _event: self.save_file())
+        root.bind("<Command-o>", lambda _event: self.open_file())
 
     def create_widgets(self):
+        menu_bar = tk.Menu(self.root)
+        file_menu = tk.Menu(menu_bar, tearoff=False)
+        file_menu.add_command(label="Save", accelerator="Ctrl+S", command=self.save_file)
+        file_menu.add_command(label="Open...", accelerator="Ctrl+O", command=self.open_file)
+        menu_bar.add_cascade(label="File", menu=file_menu)
+        self.root.configure(menu=menu_bar)
+
         outer = tk.Frame(self.root, background=BG)
         outer.pack(fill="both", expand=True, padx=20, pady=20)
 
@@ -143,10 +156,10 @@ class BeamDesignerApp:
         self.add_field_header(self.controls, "Load preset")
         preset = ttk.Combobox(
             self.controls, textvariable=self.preset_var, state="readonly",
-            values=list(PRESETS.keys()),
+            values=list(PRESETS.keys()) + ["Custom"],
         )
         preset.pack(fill="x", pady=(0, 12))
-        preset.bind("<<ComboboxSelected>>", lambda _event: self.apply_preset(self.preset_var.get()))
+        preset.bind("<<ComboboxSelected>>", self.on_preset_selected)
 
         self.add_field_header(self.controls, "Support type")
         support_row = tk.Frame(self.controls, background=PANEL)
@@ -414,6 +427,69 @@ class BeamDesignerApp:
         self.update_section_options(preset["section"])
         self.rebuild_load_ui()
         self.on_model_change()
+
+    def on_preset_selected(self, _event=None):
+        name = self.preset_var.get()
+        if name in PRESETS:
+            self.apply_preset(name)
+
+    def apply_model(self, model):
+        self.preset_var.set("Custom")
+        self.support_var.set(model.support)
+        self.span_var.set(model.span)
+        self.span_entry.delete(0, "end")
+        self.span_entry.insert(0, str(model.span))
+        self.material_var.set(model.material)
+        self.limit_var.set(model.deflection_limit)
+        self.point_loads = [PointLoad(load.magnitude, load.position) for load in model.point_loads]
+        self.uniform_loads = [
+            UniformLoad(load.magnitude, load.start, load.end)
+            for load in model.uniform_loads
+        ]
+        self.update_section_options(model.section)
+        self.rebuild_load_ui()
+        self.model = model
+        self.on_model_change()
+
+    def save_file(self):
+        path = self.current_file_path
+        if path is None:
+            path = filedialog.asksaveasfilename(
+                title="Save Beam Design",
+                defaultextension=".beam.json",
+                filetypes=[
+                    ("Beam Designer files", "*.beam.json"),
+                    ("JSON files", "*.json"),
+                    ("All files", "*.*"),
+                ],
+            )
+        if not path:
+            return
+        try:
+            save_beam_file(path, self.current_model())
+        except (OSError, ValueError) as exc:
+            messagebox.showerror("Save failed", str(exc), parent=self.root)
+            return
+        self.current_file_path = path
+
+    def open_file(self):
+        path = filedialog.askopenfilename(
+            title="Open Beam Design",
+            filetypes=[
+                ("Beam Designer files", "*.beam.json"),
+                ("JSON files", "*.json"),
+                ("All files", "*.*"),
+            ],
+        )
+        if not path:
+            return
+        try:
+            model = open_beam_file(path)
+        except (OSError, ValueError) as exc:
+            messagebox.showerror("Open failed", str(exc), parent=self.root)
+            return
+        self.apply_model(model)
+        self.current_file_path = path
 
     def update_section_options(self, selected=None):
         names = [section["name"] for section in sections_for(self.material_var.get())]

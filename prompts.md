@@ -3,3 +3,4 @@
 - 2026-11-24: Ran all four spec.md beam validation cases against beam_calculations.py and compared expected with actual reactions, loads, moments, stress, deflection, and status values. All results matched the specification within rounding. Worked.
 - 2026-11-24: Fixed the diagram hover crosshair TclError by removing the unsupported background option from Canvas.create_text in app.py. Compilation and all four calculation tests passed. Worked.
 - 2026-11-24: Updated spec.md to add a File menu with Save/Open for beam settings and loads, and removed saving designs from Out of Scope. No application code was built. Worked.
+- 2026-11-24: Implemented native File > Save/Open with JSON persistence for support, span, material, section, deflection limit, and point/uniform loads, including validation and round-trip tests. All six file and calculation tests passed. Worked.
