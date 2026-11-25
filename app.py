@@ -3,6 +3,7 @@ import os
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 
+from beam_csv import write_analysis_csv
 from beam_files import open_beam_file, save_beam_file
 from beam_calculations import (
     BeamModel,
@@ -248,6 +249,9 @@ class BeamDesignerApp:
         ).pack(side="right")
         ttk.Button(
             header, text="Use suggested section", command=self.use_suggested
+        ).pack(side="right", padx=(0, 8))
+        ttk.Button(
+            header, text="Export CSV", command=self.export_csv
         ).pack(side="right", padx=(0, 8))
 
         self.suggestion_text = tk.StringVar(value="Suggested: W12x26")
@@ -849,6 +853,22 @@ class BeamDesignerApp:
     def use_suggested(self):
         self.section_var.set(self.analysis.suggested_section)
         self.on_model_change()
+
+    def export_csv(self):
+        path = filedialog.asksaveasfilename(
+            title="Export Beam Analysis CSV",
+            defaultextension=".csv",
+            filetypes=[("CSV files", "*.csv"), ("All files", "*.*")],
+        )
+        if not path:
+            return
+        try:
+            analysis = calculate(self.current_model())
+            write_analysis_csv(path, analysis)
+        except (OSError, ValueError) as exc:
+            messagebox.showerror("CSV export failed", str(exc), parent=self.root)
+            return
+        messagebox.showinfo("CSV exported", path, parent=self.root)
 
     def open_report(self):
         if not hasattr(self, "analysis"):

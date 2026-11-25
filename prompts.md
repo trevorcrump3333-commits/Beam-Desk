@@ -7,3 +7,4 @@
 - 2026-11-24: Reran all four spec.md beam cases. Reactions, shear/moment maxima, stress, deflection values, and pass/fail checks match within rounding; case 2's calculated deflection location is 8.75 ft versus the specified 8.82 ft due to the calculation sample grid. Worked with this noted location discrepancy.
 - 2026-11-24: Rechecked the repeated crosshair TclError report and updated the hover label to draw its background as a separate Canvas rectangle rather than passing an unsupported text background option. All six regression tests and compilation passed. Worked.
 - 2026-11-24: Added an Export CSV button requirement to spec.md for a table of x, shear, moment, and deflection along the beam, including units. No application code was built. Worked.
+- 2026-11-24: Implemented Export CSV in the app, writing each analysis sample's x, shear, moment, and deflection with unit-bearing headers. The CSV export test and all existing file/calculation tests passed. Worked.
